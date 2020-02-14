@@ -20,6 +20,10 @@
 
 + [hive相关复习](./md_files/hive.md)
 
+## python
+
++ [python相关复习](./md_files/python.md)
+
 
 
 
