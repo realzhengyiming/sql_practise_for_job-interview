@@ -1,4 +1,6 @@
-# sql题目收集题目
+# sql题目收集题目（保持状态）
+
+
 
 （1）**查出每个用户第一单的消费金额**。链接：https://www.nowcoder.com/questionTerminal/b61f123aeaad48dd8afa1937f528e5e6
 来源：牛客网
@@ -555,6 +557,56 @@ select distinct Name Customers from Customers where Id not in (select distinct C
 
 # 连接表进行查询也可以，判断null 就可以
 select dis
+
+```
+
+
+
+（10）七日留存率 mysql 查询次日留存 三日留存 七日留存
+
+https://blog.csdn.net/daliangliangliangge/article/details/102743004 
+
+这个例子就很好，
+
+这种才更加的现实。这些东西是实际使用的指标。留存率就是  比如三日留存率，三天连续登陆的人的人数/三天前就登陆过的人的总人数 * 100% 加上一个百分号这样就可以了。  这种理解是对的，几天后选出
+
+留存率=新增用户中登录用户数/新增用户数*100%（一般统计周期为天）
+
+新增用户数：在某个时间段（一般为第一整天）新登录应用的用户数；只出现一次日期的登陆
+
+登录用户数：登录应用后至当前时间，至少登录过一次的用户数；
+
+第N日留存：指的是新增用户日之后的第N日依然登录的用户占新增用户的比例
+
+第1日留存率（即“次留”）：（当天新增的用户中，新增日之后的第1天还登录的用户数）/第一天新增总用户数；
+
+第2日留存率：（当天新增的用户中，新增日之后的第2天还登录的用户数）/第一天新增总用户数；
+
+第3日留存率：（当天新增的用户中，新增日之后的第3天还登录的用户数）/第一天新增总用户数；
+
+第7日留存率：（当天新增的用户中，新增日之后的第7天还登录的用户数）/第一天新增总用户数；
+
+第30日留存率：（当天新增的用户中，新增日之后的第30天还登录的用户数）/第一天新增总用户数
+
+```sql
+-- member-id为用户唯一标识
+-- create_time为用户登陆时间，一个用户可以存在多次登陆记录
+-- 以2019-09-01为基准，计算一天的1到30日留存数
+SELECT retain_day, COUNT(member_id)
+FROM (
+-- 用户在当天可以有多次登陆行为，所以需要distinct
+	SELECT DISTINCT member_id, DATE_FORMAT(create_time, '%Y-%m-%d') AS date1
+		, DATEDIFF(create_time, '2019-09-01') AS retain_day
+	FROM bss_memb_active
+	WHERE DATE_FORMAT(create_time, '%Y-%m-%d') BETWEEN '2019-09-01' AND '2019-09-30'
+-- 需要去除不在基准日的数据
+		AND member_id IN (
+			SELECT DISTINCT member_id
+			FROM bss_memb_active
+			WHERE DATE_FORMAT(create_time, '%Y-%m-%d') = '2019-09-01'
+		)
+) aa
+GROUP BY retain_day  # 多日留存率对比的。
 
 ```
 
