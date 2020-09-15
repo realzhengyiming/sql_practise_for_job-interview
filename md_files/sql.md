@@ -2,6 +2,10 @@
 
 
 
+https://blog.csdn.net/dragonbranches/article/details/82759005
+sql聚合函数相关  
+
+
 （1）**查出每个用户第一单的消费金额**。链接：https://www.nowcoder.com/questionTerminal/b61f123aeaad48dd8afa1937f528e5e6
 来源：牛客网
 
